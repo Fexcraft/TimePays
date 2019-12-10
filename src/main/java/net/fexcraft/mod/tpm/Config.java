@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class Config {
 	
 	public static long INTERVAL;
-	public static boolean D;
 	//
 	public static File CONFIG_PATH;
 	public static final String CATEGORY = "Settings";

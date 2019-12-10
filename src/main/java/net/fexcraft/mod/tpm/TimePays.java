@@ -8,7 +8,11 @@ import java.util.Date;
 import java.util.Timer;
 
 import net.fexcraft.lib.common.math.Time;
+import net.fexcraft.lib.mc.utils.Static;
+import net.fexcraft.mod.fsmm.api.PlayerCapability;
+import net.fexcraft.mod.fsmm.impl.cap.PlayerCapabilityUtil;
 import net.fexcraft.mod.tpm.compat.RewardHandler;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -33,7 +37,8 @@ public class TimePays {
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
-		Config.initialize(event); 
+		Config.initialize(event);
+    	CapabilityManager.INSTANCE.register(PlayerCapability.class, new PlayerCapabilityUtil.Storage(), new PlayerCapabilityUtil.Callable());
 	}
 	
 	@Mod.EventHandler
@@ -59,14 +64,14 @@ public class TimePays {
 			LocalDateTime midnight = LocalDateTime.of(LocalDate.now(ZoneOffset.systemDefault()), LocalTime.MIDNIGHT);
 			long mid = midnight.toInstant(ZoneOffset.UTC).toEpochMilli(); long date = Time.getDate();
 			while((mid += Config.INTERVAL) < date);
-			(INTERVAL = new Timer()).schedule(new Tracker(), new Date(mid), Config.INTERVAL);
+			(INTERVAL = new Timer()).schedule(new Tracker(), new Date(mid), Static.dev() ? 20000 : Config.INTERVAL);
 		}
-		Tracker.load();
+		//Tracker.load();
 	}
 	
 	@Mod.EventHandler
 	public void serverStopping(FMLServerStoppingEvent event){
-		Tracker.save();
+		//Tracker.save();
 	}
 
 }
