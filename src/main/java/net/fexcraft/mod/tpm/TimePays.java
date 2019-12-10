@@ -57,8 +57,8 @@ public class TimePays {
 		}
 		RewardHandler.HANDLERS.put("item", new MCItemHandler());
 		//
-		SimpleUpdateHandler.register(MODID, 1, VERSION);
-		SimpleUpdateHandler.setUpdateMessage(MODID, PREFIX + " &7New Version available! &0(&8" + SimpleUpdateHandler.getLatestVersionOf(MODID) + "&0)");
+		String update_id = "tpm"; SimpleUpdateHandler.register(update_id, 1, VERSION);
+		SimpleUpdateHandler.setUpdateMessage(update_id, PREFIX + " &7New Version available! &0(&8" + SimpleUpdateHandler.getLatestVersionOf(update_id) + "&0)");
 	}
 	
 	@Mod.EventHandler
