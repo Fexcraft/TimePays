@@ -9,8 +9,9 @@ import java.util.Timer;
 
 import net.fexcraft.lib.common.math.Time;
 import net.fexcraft.lib.mc.utils.Static;
-import net.fexcraft.mod.fsmm.api.PlayerCapability;
-import net.fexcraft.mod.fsmm.impl.cap.PlayerCapabilityUtil;
+import net.fexcraft.mod.tpm.cap.CapabilityContainer;
+import net.fexcraft.mod.tpm.cap.PlayerCapability;
+import net.fexcraft.mod.tpm.compat.MCItemHandler;
 import net.fexcraft.mod.tpm.compat.RewardHandler;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
@@ -22,7 +23,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(modid = TimePays.MODID, name = "Time Pays Mod", version = TimePays.VERSION, dependencies = "required-after:fcl;after:fsmm", serverSideOnly = true,
+@Mod(modid = TimePays.MODID, name = "Time Pays Mod", version = TimePays.VERSION, dependencies = "required-after:fcl;after:fsmm", //serverSideOnly = true,
 	guiFactory = "net.fexcraft.mod.tp.GuiFactory", acceptedMinecraftVersions = "*", acceptableRemoteVersions = "*")
 public class TimePays {
 	
@@ -38,7 +39,8 @@ public class TimePays {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
 		Config.initialize(event);
-    	CapabilityManager.INSTANCE.register(PlayerCapability.class, new PlayerCapabilityUtil.Storage(), new PlayerCapabilityUtil.Callable());
+    	CapabilityManager.INSTANCE.register(PlayerCapability.class,
+    		new CapabilityContainer.Storage(), new CapabilityContainer.Callable());
 	}
 	
 	@Mod.EventHandler
@@ -49,8 +51,10 @@ public class TimePays {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event){
 		if(Loader.isModLoaded("fsmm")){
-			RewardHandler.HANDLERS.put("fsmm", new net.fexcraft.mod.tpm.compat.FSMMHandler());
+			RewardHandler.HANDLERS.put("fsmm_item", new net.fexcraft.mod.tpm.compat.FSMMHandler.Item());
+			RewardHandler.HANDLERS.put("fsmm_currency", new net.fexcraft.mod.tpm.compat.FSMMHandler.Currency());
 		}
+		RewardHandler.HANDLERS.put("item", new MCItemHandler());
 	}
 	
 	@Mod.EventHandler
@@ -64,7 +68,7 @@ public class TimePays {
 			LocalDateTime midnight = LocalDateTime.of(LocalDate.now(ZoneOffset.systemDefault()), LocalTime.MIDNIGHT);
 			long mid = midnight.toInstant(ZoneOffset.UTC).toEpochMilli(); long date = Time.getDate();
 			while((mid += Config.INTERVAL) < date);
-			(INTERVAL = new Timer()).schedule(new Tracker(), new Date(mid), Static.dev() ? 20000 : Config.INTERVAL);
+			(INTERVAL = new Timer()).schedule(new Tracker(), new Date(mid), Static.dev() ? 10000 : Config.INTERVAL * 1000);
 		}
 		//Tracker.load();
 	}

@@ -71,7 +71,6 @@ public class CapabilityContainer implements ICapabilitySerializable<NBTBase>{
 	
 	public static class Implementation implements PlayerCapability {
 		
-		@SuppressWarnings("unused")
 		private EntityPlayer player;
 		private long total = 0, session = 0, joined = 0, left = 0;
 		//private TreeMap<Integer, Long> dimensions = new TreeMap<>();
@@ -166,7 +165,7 @@ public class CapabilityContainer implements ICapabilitySerializable<NBTBase>{
 			for(Reward rew : RewardHandler.REWARDS.values()){
 				if(rew.isApplicable(this, getLastRewarded(rew.id))){
 					RewardHandler.HANDLERS.get(rew.handler).rewardPlayer(player, rew);
-					received.put(rew.id, Time.getDate() - 10);
+					received.put(rew.id, Time.getDate() - 1);
 				}
 			}
 		}

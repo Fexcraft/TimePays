@@ -23,28 +23,25 @@ public class Config {
 	private static Configuration config;
 	
 	public static void initialize(FMLPreInitializationEvent event){
+		File file = new File(event.getSuggestedConfigurationFile().getParentFile() + "/tpm_rewards.json");
+		if(!file.getParentFile().exists()) file.getParentFile().mkdirs(); if(!file.exists()) JsonUtil.write(file, new JsonObject());
+		JsonElement arrey = JsonUtil.read(file, false); JsonArray array = arrey.getAsJsonArray();
+		for(JsonElement elm : array){
+			try{
+				Reward reward = new Reward(elm.getAsJsonObject());
+				RewardHandler.REWARDS.put(reward.id, reward);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		//
 		config = new Configuration(event.getSuggestedConfigurationFile(), "1.0", true);
 		config.load();
 		config.setCategoryRequiresMcRestart(CATEGORY, true);
 		config.setCategoryRequiresWorldRestart(CATEGORY, true);
-		config.setCategoryComment(CATEGORY, "General State Settings.");
+		config.setCategoryComment(CATEGORY, "General Settings.");
 		refresh(); config.save();
-		//
-		File file = new File(event.getSuggestedConfigurationFile().getParentFile() + "/timepays.json");
-		if(!file.getParentFile().exists()) file.getParentFile().mkdirs(); if(!file.exists()) JsonUtil.write(file, new JsonObject());
-		JsonObject obj = JsonUtil.get(file);
-		if(obj.has("rewards")){
-			JsonArray array = obj.get("rewars").getAsJsonArray();
-			for(JsonElement elm : array){
-				try{
-					Reward reward = new Reward(elm.getAsJsonObject());
-					RewardHandler.REWARDS.put(reward.id, reward);
-				}
-				catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	public static List<IConfigElement> getList(){

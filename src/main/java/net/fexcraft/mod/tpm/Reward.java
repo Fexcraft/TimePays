@@ -17,9 +17,9 @@ public class Reward {
 	
 	public Reward(JsonObject obj){
 		id = JsonUtil.getIfExists(obj, "id", "noid_" + Static.random.nextInt(9999));
-		handler = JsonUtil.getIfExists(obj, "handler", "none");
+		handler = JsonUtil.getIfExists(obj, "type", "none");
 		session = !JsonUtil.getIfExists(obj, "total", false);
-		String type = JsonUtil.getIfExists(obj, "interval_type", "m");
+		String type = JsonUtil.getIfExists(obj, "interval-type", "m");
 		long multiplier = 1;
 		switch(type){
 			case "ms": multiplier = 1;
@@ -28,12 +28,12 @@ public class Reward {
 			case "h": multiplier = Time.HOUR_MS; break;
 			case "d": multiplier = Time.DAY_MS; break;
 		}
-		interval = JsonUtil.getIfExists(obj, "interval_time", 10).longValue() * multiplier;
-		reward = obj.get("reward"); onetime = JsonUtil.getIfExists(obj, "one_time", false);
+		interval = JsonUtil.getIfExists(obj, "interval-time", 10).longValue() * multiplier;
+		reward = obj.get("reward"); onetime = JsonUtil.getIfExists(obj, "one-time", false);
 	}
 
 	public boolean isApplicable(PlayerCapability player, Long last_reward){
-		if(onetime && !session && last_reward != null) return false;
+		if(onetime && last_reward != null) return false;
 		else if(last_reward == null) last_reward = player.getJoinTime();
 		if(!session){//total
 			if(onetime && player.getTotalOnlineTime() >= interval) return true;

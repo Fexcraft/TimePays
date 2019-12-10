@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 public interface PlayerCapability {
 	
-	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation("fsmm:player");
+	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation("tpm:player");
 	
 	public EntityPlayer getPlayer();
 	
