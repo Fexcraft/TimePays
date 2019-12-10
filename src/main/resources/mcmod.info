@@ -1,16 +1,16 @@
 [
-{
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+	{
+	  "modid": "timepays",
+	  "name": "\"Time Pays\" Mod",
+	  "description": "A Mod Tracking Player Online times and giving rewards.",
+	  "version": "${version}",
+	  "mcversion": "${mcversion}",
+	  "url": "http://fexcraft.net/",
+	  "updateUrl": "",
+	  "authorList": ["FEX___96"],
+	  "credits": "The Forge and FML guys.",
+	  "logoFile": "",
+	  "screenshots": [],
+	  "dependencies": []
+	}
 ]
