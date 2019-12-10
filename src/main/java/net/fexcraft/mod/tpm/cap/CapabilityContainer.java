@@ -3,6 +3,8 @@ package net.fexcraft.mod.tpm.cap;
 import java.util.TreeMap;
 
 import net.fexcraft.lib.common.math.Time;
+import net.fexcraft.mod.tpm.Reward;
+import net.fexcraft.mod.tpm.compat.RewardHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -71,9 +73,9 @@ public class CapabilityContainer implements ICapabilitySerializable<NBTBase>{
 		
 		@SuppressWarnings("unused")
 		private EntityPlayer player;
-		private long total = 0, session = 0, joined = 0, last = 0;
-		private TreeMap<Integer, Long> dimensions = new TreeMap<>();
-		private TreeMap<Integer, Long> dim_totals = new TreeMap<>();
+		private long total = 0, session = 0, joined = 0, left = 0;
+		//private TreeMap<Integer, Long> dimensions = new TreeMap<>();
+		//private TreeMap<Integer, Long> dim_totals = new TreeMap<>();
 		private TreeMap<String, Long> received = new TreeMap<>();
 
 		public PlayerCapability setEntityPlayer(EntityPlayer player){
@@ -95,7 +97,7 @@ public class CapabilityContainer implements ICapabilitySerializable<NBTBase>{
 			return received.get(id);
 		}
 
-		@Override
+		/*@Override
 		public Long getOnlineTimeForDimension(int dim){
 			return dimensions.get(dim);
 		}
@@ -103,16 +105,16 @@ public class CapabilityContainer implements ICapabilitySerializable<NBTBase>{
 		@Override
 		public Long getTotalOnlineTimeForDimension(int dim){
 			return dim_totals.get(dim);
-		}
+		}*/
 
 		@Override
 		public NBTTagCompound write(){
 			NBTTagCompound compound = new NBTTagCompound();
 			compound.setLong("total", total);
 			compound.setLong("last", joined);
-			for(int dim : dim_totals.keySet()){
+			/*for(int dim : dim_totals.keySet()){
 				compound.setLong("dim_" + dim, dim_totals.get(dim));
-			}
+			}*/
 			for(String rew : received.keySet()){
 				compound.setLong("rew_" + rew, received.get(rew));
 			}
@@ -124,14 +126,14 @@ public class CapabilityContainer implements ICapabilitySerializable<NBTBase>{
 		public void read(NBTTagCompound compound){
 			if(compound == null) return;
 			total = compound.getLong("total");
-			last = compound.getLong("last");
+			left = compound.getLong("last");
 			joined = Time.getDate();
 			for(String str : compound.getKeySet()){
-				if(str.startsWith("dim_")){
+				/*if(str.startsWith("dim_")){
 					int dim = Integer.parseInt(str.replace("dim_", ""));
 					dimensions.put(dim, 0l); dim_totals.put(dim, compound.getLong(str));
 				}
-				else if(str.startsWith("rew_")){
+				else*/ if(str.startsWith("rew_")){
 					received.put(str.replace("rew_", ""), compound.getLong(str));
 				}
 				else continue;
@@ -142,9 +144,9 @@ public class CapabilityContainer implements ICapabilitySerializable<NBTBase>{
 		public void copyFrom(PlayerCapability capraw){
 			Implementation capability = (Implementation)capraw;
 			total = capability.total; session = capability.session;
-			joined = capability.joined; last = capability.last;
-			dimensions = capability.dimensions;
-			dim_totals = capability.dim_totals;
+			joined = capability.joined; left = capability.left;
+			//dimensions = capability.dimensions;
+			//dim_totals = capability.dim_totals;
 			received = capability.received;
 		}
 
@@ -155,12 +157,23 @@ public class CapabilityContainer implements ICapabilitySerializable<NBTBase>{
 
 		@Override
 		public long getLastLeftTime(){
-			return last;
+			return left;
 		}
 
 		@Override
-		public void onInterval(){
-			//TODO
+		public void onInterval(long interval, long passed){
+			total += passed; session += passed;
+			for(Reward rew : RewardHandler.REWARDS.values()){
+				if(rew.isApplicable(this, getLastRewarded(rew.id))){
+					RewardHandler.HANDLERS.get(rew.handler).rewardPlayer(player, rew);
+					received.put(rew.id, Time.getDate() - 10);
+				}
+			}
+		}
+
+		@Override
+		public EntityPlayer getPlayer(){
+			return player;
 		}
 		
 	}

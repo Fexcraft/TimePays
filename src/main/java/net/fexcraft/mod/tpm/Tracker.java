@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.TimerTask;
 
+import net.fexcraft.lib.common.math.Time;
 import net.fexcraft.lib.mc.utils.Print;
 import net.fexcraft.lib.mc.utils.Static;
 import net.fexcraft.mod.tpm.cap.CapabilityContainer;
@@ -19,12 +20,16 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 @Mod.EventBusSubscriber
 public class Tracker extends TimerTask {
+	
+	private static long lastinterval = 0, passed = 0;
 
 	@Override
 	public void run(){
+		passed = Time.getDate() - lastinterval;
 		Static.getServer().getPlayerList().getPlayers().forEach(player -> {
-			player.getCapability(CapabilityContainer.PLAYER, null).onInterval();
+			player.getCapability(CapabilityContainer.PLAYER, null).onInterval(lastinterval, passed);
 		});
+		lastinterval = Time.getDate();
 	}
 	
 	@SubscribeEvent
