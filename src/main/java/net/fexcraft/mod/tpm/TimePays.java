@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Timer;
 
 import net.fexcraft.lib.common.math.Time;
+import net.fexcraft.lib.mc.network.SimpleUpdateHandler;
 import net.fexcraft.lib.mc.utils.Static;
 import net.fexcraft.mod.tpm.cap.CapabilityContainer;
 import net.fexcraft.mod.tpm.cap.PlayerCapability;
@@ -55,6 +56,9 @@ public class TimePays {
 			RewardHandler.HANDLERS.put("fsmm_currency", new net.fexcraft.mod.tpm.compat.FSMMHandler.Currency());
 		}
 		RewardHandler.HANDLERS.put("item", new MCItemHandler());
+		//
+		SimpleUpdateHandler.register(MODID, 1, VERSION);
+		SimpleUpdateHandler.setUpdateMessage(MODID, PREFIX + " &7New Version available! &0(&8" + SimpleUpdateHandler.getLatestVersionOf(MODID) + "&0)");
 	}
 	
 	@Mod.EventHandler
