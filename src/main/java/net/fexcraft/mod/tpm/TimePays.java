@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(modid = TimePays.MODID, name = "Time Pays Mod", version = TimePays.VERSION, dependencies = "required-after:fcl;after:fsmm", //serverSideOnly = true,
+@Mod(modid = TimePays.MODID, name = "Time Pays Mod", version = TimePays.VERSION, dependencies = "required-after:fcl;after:fsmm", serverSideOnly = true,
 	guiFactory = "net.fexcraft.mod.tp.GuiFactory", acceptedMinecraftVersions = "*", acceptableRemoteVersions = "*")
 public class TimePays {
 	
