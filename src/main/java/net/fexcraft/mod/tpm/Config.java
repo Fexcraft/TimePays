@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import net.fexcraft.lib.common.json.JsonUtil;
 import net.fexcraft.mod.tpm.compat.RewardHandler;
@@ -24,7 +23,7 @@ public class Config {
 	
 	public static void initialize(FMLPreInitializationEvent event){
 		File file = new File(event.getSuggestedConfigurationFile().getParentFile() + "/tpm_rewards.json");
-		if(!file.getParentFile().exists()) file.getParentFile().mkdirs(); if(!file.exists()) JsonUtil.write(file, new JsonObject());
+		if(!file.getParentFile().exists()) file.getParentFile().mkdirs(); if(!file.exists()) JsonUtil.write(file, new JsonArray());
 		JsonElement arrey = JsonUtil.read(file, false); JsonArray array = arrey.getAsJsonArray();
 		for(JsonElement elm : array){
 			try{
