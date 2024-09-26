@@ -63,9 +63,9 @@ Example config:
 	}
 ]
 ```
-Example result:
-![img0](https://cdn.discordapp.com/attachments/365126848914391040/654005866621698071/unknown.png)
-![img1](https://cdn.discordapp.com/attachments/365126848914391040/654005940013629470/unknown.png)
+Example result:    
+![img0](http://fexcraft.net/files/mod_data/timepays/tpex0.png)
+![img1](http://fexcraft.net/files/mod_data/timepays/tpex1.png)
 
 #### Config
 The config has only one value - the interval - it is in **minutes**.
