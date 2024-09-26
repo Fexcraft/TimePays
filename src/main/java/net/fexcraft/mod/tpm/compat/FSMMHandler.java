@@ -4,10 +4,10 @@ import com.google.gson.JsonObject;
 
 import net.fexcraft.lib.common.json.JsonUtil;
 import net.fexcraft.lib.mc.utils.Print;
-import net.fexcraft.mod.fsmm.data.FSMMCapabilities;
 import net.fexcraft.mod.fsmm.data.Manageable;
-import net.fexcraft.mod.fsmm.data.PlayerCapability;
+import net.fexcraft.mod.fsmm.data.PlayerAccData;
 import net.fexcraft.mod.tpm.Reward;
+import net.fexcraft.mod.uni.UniEntity;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class FSMMHandler {
@@ -17,8 +17,8 @@ public class FSMMHandler {
 		@Override
 		public void rewardPlayer(EntityPlayer player, Reward reward){
 			JsonObject obj = reward.reward.getAsJsonObject();
-			PlayerCapability cap = player.getCapability(FSMMCapabilities.PLAYER, null);
-			cap.addMoneyToInventory(JsonUtil.getIfExists(obj, "amount", 0).longValue());
+			PlayerAccData data = UniEntity.get(player).getApp(PlayerAccData.class);
+			data.addMoneyToInventory(JsonUtil.getIfExists(obj, "amount", 0).longValue());
 			if(obj.has("message")){
 				Print.chat(player, obj.get("message").getAsString());
 			}
@@ -31,8 +31,8 @@ public class FSMMHandler {
 		@Override
 		public void rewardPlayer(EntityPlayer player, Reward reward){
 			JsonObject obj = reward.reward.getAsJsonObject();
-			PlayerCapability cap = player.getCapability(FSMMCapabilities.PLAYER, null);
-			cap.getAccount().modifyBalance(Manageable.Action.ADD, JsonUtil.getIfExists(obj, "amount", 0).longValue(), player);
+			PlayerAccData data = UniEntity.get(player).getApp(PlayerAccData.class);
+			data.getAccount().modifyBalance(Manageable.Action.ADD, JsonUtil.getIfExists(obj, "amount", 0).longValue(), UniEntity.getEntity(player));
 			if(obj.has("message")){
 				Print.chat(player, obj.get("message").getAsString());
 			}
