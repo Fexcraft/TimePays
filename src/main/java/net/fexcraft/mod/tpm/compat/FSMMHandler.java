@@ -1,8 +1,6 @@
 package net.fexcraft.mod.tpm.compat;
 
-import com.google.gson.JsonObject;
-
-import net.fexcraft.lib.common.json.JsonUtil;
+import net.fexcraft.app.json.JsonMap;
 import net.fexcraft.lib.mc.utils.Print;
 import net.fexcraft.mod.fsmm.data.Manageable;
 import net.fexcraft.mod.fsmm.data.PlayerAccData;
@@ -16,11 +14,11 @@ public class FSMMHandler {
 
 		@Override
 		public void rewardPlayer(EntityPlayer player, Reward reward){
-			JsonObject obj = reward.reward.getAsJsonObject();
+			JsonMap map = reward.reward;
 			PlayerAccData data = UniEntity.get(player).getApp(PlayerAccData.class);
-			data.addMoneyToInventory(JsonUtil.getIfExists(obj, "amount", 0).longValue());
-			if(obj.has("message")){
-				Print.chat(player, obj.get("message").getAsString());
+			data.addMoneyToInventory(map.get("amount", 0));
+			if(map.has("message")){
+				Print.chat(player, map.get("message").string_value());
 			}
 		}
 		
@@ -30,11 +28,11 @@ public class FSMMHandler {
 
 		@Override
 		public void rewardPlayer(EntityPlayer player, Reward reward){
-			JsonObject obj = reward.reward.getAsJsonObject();
+			JsonMap map = reward.reward;
 			PlayerAccData data = UniEntity.get(player).getApp(PlayerAccData.class);
-			data.getAccount().modifyBalance(Manageable.Action.ADD, JsonUtil.getIfExists(obj, "amount", 0).longValue(), UniEntity.getEntity(player));
-			if(obj.has("message")){
-				Print.chat(player, obj.get("message").getAsString());
+			data.getAccount().modifyBalance(Manageable.Action.ADD, map.getLong("amount", 0), UniEntity.getEntity(player));
+			if(map.has("message")){
+				Print.chat(player, map.get("message").string_value());
 			}
 		}
 		
