@@ -1,5 +1,6 @@
 package net.fexcraft.mod.tpm;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -36,10 +37,11 @@ public class TimePays {
 	@Mod.Instance(MODID)
 	public static TimePays INSTANCE;
 	public static Timer INTERVAL;
+	public static Config CONFIG;
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
-		Config.initialize(event);
+		CONFIG = new Config(new File(event.getSuggestedConfigurationFile().getParentFile() + "/tpm.json"));
     	CapabilityManager.INSTANCE.register(PlayerCapability.class,
     		new CapabilityContainer.Storage(), new CapabilityContainer.Callable());
 	}
