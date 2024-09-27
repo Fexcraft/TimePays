@@ -3,6 +3,7 @@ package net.fexcraft.mod.tpm;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.fexcraft.app.json.JsonMap;
 import net.fexcraft.lib.common.Static;
 import net.fexcraft.lib.common.json.JsonUtil;
 import net.fexcraft.lib.common.math.Time;
@@ -13,13 +14,13 @@ public class Reward {
 	public final String id, handler;
 	public final boolean session, onetime;
 	public final long interval;
-	public final JsonElement reward;
+	public final JsonMap reward;
 	
-	public Reward(JsonObject obj){
-		id = JsonUtil.getIfExists(obj, "id", "noid_" + Static.random.nextInt(9999));
-		handler = JsonUtil.getIfExists(obj, "type", "none");
-		session = !JsonUtil.getIfExists(obj, "total", false);
-		String type = JsonUtil.getIfExists(obj, "interval-type", "m");
+	public Reward(String rid, JsonMap map){
+		id = rid;
+		handler = map.getString("type", "none");
+		session = !map.getBoolean("total", false);
+		String type = map.getString("interval-type", "m");
 		long multiplier = 1;
 		switch(type){
 			case "ms": multiplier = 1;
@@ -28,8 +29,9 @@ public class Reward {
 			case "h": multiplier = Time.HOUR_MS; break;
 			case "d": multiplier = Time.DAY_MS; break;
 		}
-		interval = JsonUtil.getIfExists(obj, "interval-time", 10).longValue() * multiplier;
-		reward = obj.get("reward"); onetime = JsonUtil.getIfExists(obj, "one-time", false);
+		interval = map.getLong("interval-time", 10) * multiplier;
+		reward = map.getMap("reward");
+		onetime = map.getBoolean("one-time", false);
 	}
 
 	public boolean isApplicable(PlayerCapability player, Long last_reward){
