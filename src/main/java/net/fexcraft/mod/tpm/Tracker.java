@@ -9,6 +9,9 @@ import net.fexcraft.mod.uni.UniEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
+/**
+ * @author Ferdinand Calo' (FEX___96)
+ */
 public class Tracker extends TimerTask {
 
 	private static long lastinterval = 0, passed = 0;
