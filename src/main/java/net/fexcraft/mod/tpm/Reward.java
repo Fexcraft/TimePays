@@ -3,10 +3,15 @@ package net.fexcraft.mod.tpm;
 import net.fexcraft.app.json.JsonMap;
 import net.fexcraft.lib.common.math.Time;
 
+/**
+ * @author Ferdinand Calo' (FEX___96)
+ */
 public class Reward {
 	
-	public final String id, handler;
-	public final boolean session, onetime;
+	public final String id;
+	public final String handler;
+	public final boolean session;
+	public final boolean onetime;
 	public final long interval;
 	public final JsonMap reward;
 	
