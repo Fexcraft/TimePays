@@ -21,7 +21,7 @@ public class Config extends ConfigBase {
 
 	@Override
 	protected void fillInfo(JsonMap map){
-		map.add("info", "TimePays Configuration File");
+		map.add("info", "TimePaysMod Configuration File");
 		map.add("wiki", "https://fexcraft.net/wiki/mod/timepays");
 	}
 
