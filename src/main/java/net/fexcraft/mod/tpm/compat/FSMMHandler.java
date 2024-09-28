@@ -6,6 +6,9 @@ import net.fexcraft.mod.fsmm.data.PlayerAccData;
 import net.fexcraft.mod.tpm.Reward;
 import net.fexcraft.mod.uni.UniEntity;
 
+/**
+ * @author Ferdinand Calo' (FEX___96)
+ */
 public class FSMMHandler {
 	
 	public static class Item implements RewardHandler {
@@ -28,7 +31,7 @@ public class FSMMHandler {
 		public void rewardPlayer(UniEntity player, Reward reward){
 			JsonMap map = reward.reward;
 			PlayerAccData data = player.getApp(PlayerAccData.class);
-			data.getAccount().modifyBalance(Manageable.Action.ADD, map.getLong("amount", 0), UniEntity.getEntity(player));
+			data.getAccount().modifyBalance(Manageable.Action.ADD, map.getLong("amount", 0), player.entity);
 			if(map.has("message")){
 				player.entity.send(map.get("message").string_value());
 			}
