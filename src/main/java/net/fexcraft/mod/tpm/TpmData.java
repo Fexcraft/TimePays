@@ -88,9 +88,14 @@ public class TpmData implements Appendable<UniEntity> {
 		total += passed;
 		session += passed;
 		for(Reward rew : RewardHandler.REWARDS.values()){
-			if(rew.isApplicable(this, getLastRewarded(rew.id))){
-				RewardHandler.HANDLERS.get(rew.handler).rewardPlayer(player, rew);
-				received.put(rew.id, Time.getDate() - 1);
+			try{
+				if(rew.isApplicable(this, getLastRewarded(rew.id))){
+					RewardHandler.HANDLERS.get(rew.handler).rewardPlayer(player, rew);
+					received.put(rew.id, Time.getDate() - 1);
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
 			}
 		}
 	}
