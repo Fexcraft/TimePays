@@ -1,13 +1,7 @@
 package net.fexcraft.mod.tpm;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import net.fexcraft.app.json.JsonMap;
-import net.fexcraft.lib.common.Static;
-import net.fexcraft.lib.common.json.JsonUtil;
 import net.fexcraft.lib.common.math.Time;
-import net.fexcraft.mod.tpm.cap.PlayerCapability;
 
 public class Reward {
 	
@@ -34,7 +28,7 @@ public class Reward {
 		onetime = map.getBoolean("one-time", false);
 	}
 
-	public boolean isApplicable(PlayerCapability player, Long last_reward){
+	public boolean isApplicable(TpmData player, Long last_reward){
 		if(onetime && last_reward != null) return false;
 		else if(last_reward == null) last_reward = player.getJoinTime();
 		if(!session){//total
