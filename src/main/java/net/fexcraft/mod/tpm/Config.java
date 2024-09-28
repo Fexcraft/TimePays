@@ -8,6 +8,9 @@ import net.fexcraft.app.json.JsonValue;
 import net.fexcraft.mod.tpm.compat.RewardHandler;
 import net.fexcraft.mod.uni.ConfigBase;
 
+/**
+ * @author Ferdinand Calo' (FEX___96)
+ */
 public class Config extends ConfigBase {
 	
 	public static long INTERVAL;
