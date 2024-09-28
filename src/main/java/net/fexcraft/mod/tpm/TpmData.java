@@ -6,7 +6,7 @@ import net.fexcraft.mod.uni.Appendable;
 import net.fexcraft.mod.uni.UniEntity;
 import net.fexcraft.mod.uni.tag.TagCW;
 
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 /**
  * @author Ferdinand Calo' (FEX___96)
@@ -15,7 +15,7 @@ public class TpmData implements Appendable<UniEntity> {
 
 	private UniEntity player;
 	private long total = 0, session = 0, joined = 0, left = 0;
-	private TreeMap<String, Long> received = new TreeMap<>();
+	private LinkedHashMap<String, Long> received = new LinkedHashMap<>();
 
 	public TpmData(UniEntity unient){
 		player = unient;
