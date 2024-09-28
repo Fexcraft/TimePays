@@ -1,9 +1,8 @@
 package net.fexcraft.mod.tpm.compat;
 
 import net.fexcraft.app.json.JsonMap;
-import net.fexcraft.lib.common.json.JsonUtil;
-import net.fexcraft.lib.mc.utils.Print;
 import net.fexcraft.mod.tpm.Reward;
+import net.fexcraft.mod.uni.UniEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +12,7 @@ import net.minecraft.nbt.NBTException;
 public class MCItemHandler implements RewardHandler {
 
 	@Override
-	public void rewardPlayer(EntityPlayer player, Reward reward){
+	public void rewardPlayer(UniEntity player, Reward reward){
 		JsonMap map = reward.reward;
 		Item item = Item.getByNameOrId(map.getString("item", "minecraft:stone"));
 		ItemStack stack = new ItemStack(item, map.getInteger("count", 1), map.getInteger("meta", 0));
@@ -25,9 +24,10 @@ public class MCItemHandler implements RewardHandler {
 				e.printStackTrace();
 			}
 		}
-		player.addItemStackToInventory(stack);
+		EntityPlayer ep = player.entity.local();
+		ep.addItemStackToInventory(stack);
 		if(map.has("message")){
-			Print.chat(player, map.get("message").string_value());
+			player.entity.send(map.get("message").string_value());
 		}
 	}
 
