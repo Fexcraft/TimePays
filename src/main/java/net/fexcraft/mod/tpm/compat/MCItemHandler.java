@@ -9,6 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 
+/**
+ * @author Ferdinand Calo' (FEX___96)
+ */
 public class MCItemHandler implements RewardHandler {
 
 	@Override
