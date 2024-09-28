@@ -29,11 +29,10 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 @Mod(modid = TimePays.MODID, name = "Time Pays Mod", version = TimePays.VERSION, dependencies = "required-after:fcl;after:fsmm",
 	guiFactory = "net.fexcraft.mod.tp.GuiFactory", acceptedMinecraftVersions = "*", acceptableRemoteVersions = "*")
 public class TimePays {
-	
-	public static final String VERSION = "@VERSION@";
+
+	public static final String VERSION = "2.0";
 	public static final String MODID = "timepays";
 	public static final String ADMIN_PERM = "timepays.admin";
-	public static final String PREFIX = "&0[&1TPM&0]";
 	//
 	@Mod.Instance(MODID)
 	public static TimePays INSTANCE;
@@ -43,6 +42,7 @@ public class TimePays {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
 		CONFIG = new Config(new File(event.getSuggestedConfigurationFile().getParentFile() + "/tpm.json"));
+		TpmGroups.init(new File(event.getSuggestedConfigurationFile().getParentFile() + "/tpm_groups.json"));
 		UniEntity.register(new TpmData(null));
 	}
 	
@@ -63,7 +63,7 @@ public class TimePays {
 	
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent event){
-		//
+		event.registerServerCommand(new TpmCommand());
 	}
 	
 	@Mod.EventHandler
