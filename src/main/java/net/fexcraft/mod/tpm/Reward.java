@@ -3,6 +3,8 @@ package net.fexcraft.mod.tpm;
 import net.fexcraft.app.json.JsonMap;
 import net.fexcraft.lib.common.math.Time;
 
+import java.util.ArrayList;
+
 /**
  * @author Ferdinand Calo' (FEX___96)
  */
@@ -10,6 +12,7 @@ public class Reward {
 	
 	public final String id;
 	public final String handler;
+	public final ArrayList<String> groups;
 	public final boolean session;
 	public final boolean onetime;
 	public final long interval;
@@ -18,30 +21,23 @@ public class Reward {
 	public Reward(String rid, JsonMap map){
 		id = rid;
 		handler = map.getString("type", "none");
-		session = !map.getBoolean("total", false);
-		String type = map.getString("interval-type", "m");
-		long multiplier = 1;
-		switch(type){
-			case "ms": multiplier = 1;
-			case "m": multiplier = Time.MIN_MS; break;
-			case "s": multiplier = Time.SEC_MS; break;
-			case "h": multiplier = Time.HOUR_MS; break;
-			case "d": multiplier = Time.DAY_MS; break;
-		}
-		interval = map.getLong("interval-time", 10) * multiplier;
+		session = map.getBoolean("session", !map.getBoolean("total", false));
+		interval = map.getLong("interval", 10) * Time.MIN_MS;
+		groups = map.has("groups") ? map.getArray("groups").toStringList() : null;
 		reward = map.getMap("reward");
 		onetime = map.getBoolean("one-time", false);
 	}
 
-	public boolean isApplicable(TpmData player, Long last_reward){
+	public boolean isApplicable(TpmData data, Long last_reward){
 		if(onetime && last_reward != null) return false;
-		else if(last_reward == null) last_reward = player.getJoinTime();
+		else if(last_reward == null) last_reward = data.getJoinTime();
+		if(groups != null && !TpmGroups.isInAnyGroup(data.getPlayer().entity.getUUID(), groups)) return false;
 		if(!session){//total
-			if(onetime && player.getTotalOnlineTime() >= interval) return true;
+			if(onetime && data.getTotalOnlineTime() >= interval) return true;
 			if(!onetime && Time.getDate() - last_reward >= interval) return true;
 		}
 		else{
-			if(onetime && player.getOnlineTime() >= interval) return true;
+			if(onetime && data.getOnlineTime() >= interval) return true;
 			if(!onetime && Time.getDate() - last_reward >= interval) return true;
 		}
 		return false;
