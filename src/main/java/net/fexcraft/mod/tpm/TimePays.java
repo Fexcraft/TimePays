@@ -11,11 +11,9 @@ import java.util.Timer;
 import net.fexcraft.lib.common.math.Time;
 import net.fexcraft.lib.mc.network.SimpleUpdateHandler;
 import net.fexcraft.lib.mc.utils.Static;
-import net.fexcraft.mod.tpm.cap.CapabilityContainer;
-import net.fexcraft.mod.tpm.cap.PlayerCapability;
 import net.fexcraft.mod.tpm.compat.MCItemHandler;
 import net.fexcraft.mod.tpm.compat.RewardHandler;
-import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.fexcraft.mod.uni.UniEntity;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -42,8 +40,7 @@ public class TimePays {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event){
 		CONFIG = new Config(new File(event.getSuggestedConfigurationFile().getParentFile() + "/tpm.json"));
-    	CapabilityManager.INSTANCE.register(PlayerCapability.class,
-    		new CapabilityContainer.Storage(), new CapabilityContainer.Callable());
+		UniEntity.register(new TpmData(null));
 	}
 	
 	@Mod.EventHandler
