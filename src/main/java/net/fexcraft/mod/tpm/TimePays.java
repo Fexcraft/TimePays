@@ -22,6 +22,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.server.permission.DefaultPermissionLevel;
+import net.minecraftforge.server.permission.PermissionAPI;
 
 /**
  * @author Ferdinand Calo' (FEX___96)
@@ -48,7 +50,7 @@ public class TimePays {
 	
 	@Mod.EventHandler
 	public void properInit(FMLInitializationEvent event){
-		//
+		PermissionAPI.registerNode(ADMIN_PERM, DefaultPermissionLevel.OP, "TimePays Admin Perm");
 	}
 	
 	@Mod.EventHandler
