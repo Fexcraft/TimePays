@@ -1,6 +1,5 @@
 package net.fexcraft.mod.tpm;
 
-import com.mojang.authlib.GameProfile;
 import net.fexcraft.lib.mc.utils.Print;
 import net.fexcraft.mod.uni.UniEntity;
 import net.minecraft.command.CommandBase;
@@ -15,33 +14,33 @@ import java.util.Map.Entry;
 /**
  * @author Ferdinand Calo' (FEX___96)
  */
-public class TpmCommand extends CommandBase{
-    
-    @Override 
-    public String getName(){ 
-        return "tpm";
-    } 
+public class TpmCommand extends CommandBase {
 
-    @Override         
-    public String getUsage(ICommandSender sender){ 
-        return "/tpm <args>";
-    }
-    
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender){
-    	return true;
-    }
+	@Override
+	public String getName(){
+		return "tpm";
+	}
+
+	@Override
+	public String getUsage(ICommandSender sender){
+		return "/tpm <args>";
+	}
+
+	@Override
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender){
+		return true;
+	}
 
 	@Override
 	public int getRequiredPermissionLevel(){
 		return 0;
 	}
 
-    @Override 
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args){ 
-    	boolean isp = sender instanceof EntityPlayer;
+	@Override
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args){
+		boolean isp = sender instanceof EntityPlayer;
 		UniEntity player = UniEntity.get(sender);
-    	if(args.length <= 0){
+		if(args.length <= 0){
 			Print.chat(sender, "&0[&bTPM&0]&a= = = = = = = = = = =");
 			Print.chat(sender, "&bUser commands:");
 			Print.chat(sender, "&7/tpm uuid");
@@ -52,21 +51,21 @@ public class TpmCommand extends CommandBase{
 			Print.chat(sender, "&7/tpm lookup <player/uuid>");
 			Print.chat(sender, "&7/tpm clear <group>");
 			Print.chat(sender, "&7/tpm reload (config)");
-    		return;
-    	}
-    	boolean op = isp ? server.isSinglePlayer() ? true : PermissionAPI.hasPermission((EntityPlayer)sender, TimePays.ADMIN_PERM) : true;
-    	switch(args[0]){
-	    	case "uuid":{
+			return;
+		}
+		boolean op = isp ? server.isSinglePlayer() ? true : PermissionAPI.hasPermission((EntityPlayer)sender, TimePays.ADMIN_PERM) : true;
+		switch(args[0]){
+			case "uuid":{
 				if(isp) Print.chat(sender, player.entity.getUUID());
-	    		return;
-	    	}
-    		case "groups":{
+				return;
+			}
+			case "groups":{
 				Print.chat(sender, "&0[&bTPM&0]&a Groups");
 				for(Entry<String, ArrayList<UUID>> entry : TpmGroups.GROUPS.entrySet()){
 					Print.chat(sender, entry.getKey() + " (" + entry.getValue().size() + " players)");
 				}
-    			return;
-    		}
+				return;
+			}
 			case "add":{
 				if(!op || args.length < 3) return;
 				UUID uuid = getUUID(server, args[1]);
@@ -142,10 +141,11 @@ public class TpmCommand extends CommandBase{
 				Print.chat(sender, "&bINFO: This does NOT restart the interval timer.");
 				return;
 			}
-			default: break;
-    	}
+			default:
+				break;
+		}
 		Print.chat(sender, "&cInvalid Argument.");
-    }
+	}
 
 	private UUID getUUID(MinecraftServer server, String arg){
 		try{
@@ -162,10 +162,10 @@ public class TpmCommand extends CommandBase{
 		}
 	}
 
-	@Override 
-    public boolean isUsernameIndex(String[] args, int idx){
-    	return args.length > 0 && (args[0].equals("add") || args[0].equals("rem"));
-    }
-    
+	@Override
+	public boolean isUsernameIndex(String[] args, int idx){
+		return args.length > 0 && (args[0].equals("add") || args[0].equals("rem"));
+	}
+
 }
 
