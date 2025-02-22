@@ -1,11 +1,14 @@
 package net.fexcraft.mod.tpm;
 
+import net.fexcraft.lib.common.math.Vec3f;
 import net.fexcraft.lib.mc.utils.Print;
 import net.fexcraft.mod.uni.UniEntity;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.server.permission.PermissionAPI;
 
 import java.util.*;
@@ -39,7 +42,6 @@ public class TpmCommand extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args){
 		boolean isp = sender instanceof EntityPlayer;
-		UniEntity player = UniEntity.get(sender);
 		if(args.length <= 0){
 			Print.chat(sender, "&0[&bTPM&0]&a= = = = = = = = = = =");
 			Print.chat(sender, "&bUser commands:");
@@ -56,7 +58,7 @@ public class TpmCommand extends CommandBase {
 		boolean op = isp ? server.isSinglePlayer() ? true : PermissionAPI.hasPermission((EntityPlayer)sender, TimePays.ADMIN_PERM) : true;
 		switch(args[0]){
 			case "uuid":{
-				if(isp) Print.chat(sender, player.entity.getUUID());
+				if(isp) Print.chat(sender, UniEntity.getEntity(sender).getId());
 				return;
 			}
 			case "groups":{
@@ -68,7 +70,7 @@ public class TpmCommand extends CommandBase {
 			}
 			case "add":{
 				if(!op || args.length < 3) return;
-				UUID uuid = getUUID(server, args[1]);
+				UUID uuid = getUUID(sender, server, args[1]);
 				if(uuid == null) Print.chat(sender, "Player not found.");
 				else{
 					if(!TpmGroups.GROUPS.containsKey(args[2])){
@@ -88,7 +90,7 @@ public class TpmCommand extends CommandBase {
 			}
 			case "rem":{
 				if(!op || args.length < 3) return;
-				UUID uuid = getUUID(server, args[1]);
+				UUID uuid = getUUID(sender, server, args[1]);
 				if(uuid == null) Print.chat(sender, "Player not found.");
 				else{
 					if(!TpmGroups.GROUPS.containsKey(args[2])){
@@ -107,7 +109,7 @@ public class TpmCommand extends CommandBase {
 			}
 			case "lookup":{
 				if(!op || args.length < 2) return;
-				UUID uuid = getUUID(server, args[1]);
+				UUID uuid = getUUID(sender, server, args[1]);
 				if(uuid == null) Print.chat(sender, "Player not found.");
 				else{
 					Print.chat(sender, "&0[&bTPM&0]&a " + args[1] + "'s groups:");
@@ -147,7 +149,22 @@ public class TpmCommand extends CommandBase {
 		Print.chat(sender, "&cInvalid Argument.");
 	}
 
-	private UUID getUUID(MinecraftServer server, String arg){
+	private UUID getUUID(ICommandSender sender, MinecraftServer server, String arg){
+		if(arg.equals("@p")){
+			EntityPlayer player = null;
+			double closest = Integer.MAX_VALUE;
+			double dis;
+			Vec3d vec = sender.getPositionVector();
+			for(EntityPlayerMP pl : server.getPlayerList().getPlayers()){
+				if(pl.world != sender.getEntityWorld()) continue;
+				dis = pl.getDistance(vec.x, vec.y, vec.z);
+				if(dis < closest){
+					player = pl;
+					closest = dis;
+				}
+			}
+			if(player != null) return player.getGameProfile().getId();
+		}
 		try{
 			return UUID.fromString(arg);
 		}
